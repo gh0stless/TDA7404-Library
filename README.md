@@ -49,3 +49,7 @@ Alle Setter geben `true` zurück, wenn der Chip den Schreibzugriff quittiert hat
 
 - `examples/Basic`: Eingang, Klang, Soft-Mute mit Statusabfrage
 - `examples/BalanceFader`: Balance, Fader und Subwoofer über die serielle Konsole
+
+## Lizenz
+
+Public Domain ([The Unlicense](LICENSE)). Du darfst alles damit machen, ohne Bedingungen.

@@ -5,6 +5,7 @@
   "keywords": ["tda7404", "audio", "i2c", "preamp", "equalizer"],
   "authors": [{ "name": "Andreas Schumm (gh0stless)", "email": "schumm@arcor.de", "maintainer": true }],
   "license": "Unlicense",
+  "repository": { "type": "git", "url": "https://github.com/gh0stless/TDA7404-Library.git" },
   "frameworks": "arduino",
   "platforms": "*",
   "headers": "TDA7404.h"

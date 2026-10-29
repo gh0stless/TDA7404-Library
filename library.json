@@ -1,0 +1,10 @@
+{
+  "name": "TDA7404",
+  "version": "1.0.0",
+  "description": "Steuerung des ST TDA7404 Audioprozessors über I2C",
+  "keywords": ["tda7404", "audio", "i2c", "preamp", "equalizer"],
+  "authors": [{ "name": "Andre Schumm", "email": "schumm@arcor.de", "maintainer": true }],
+  "frameworks": "arduino",
+  "platforms": "*",
+  "headers": "TDA7404.h"
+}

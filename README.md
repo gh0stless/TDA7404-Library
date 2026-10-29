@@ -43,6 +43,7 @@ Alle Setter geben `true` zurueck, wenn der Chip den Schreibzugriff quittiert hat
 - Die Library spiegelt alle Register. Funktionen, die sich ein Register teilen, ueberschreiben sich deshalb nicht gegenseitig. Ein Beispiel: Die Bass-Mittenfrequenz liegt im Register des Lautsprechers LF.
 - Bei jedem Schreiben in Register 0 (Eingang/Gain) startet der Chip einen AutoZero-Zyklus und ist dabei ca. 0.3 ms stumm. `writeAll()` (Refresh) setzt standardmaessig *AutoZero Remain*, um das zu vermeiden.
 - Soft-Step-Volume nur bei 1-dB-Schritten einschalten. Bei groesseren Spruengen kann laut Datenblatt ein Fehler von 1 dB entstehen.
+- `isMuting()` und `readStatus()` lesen das Statusbyte ueber den Bus. Antwortet der Chip nicht, wartet der Lesezugriff bis zum Timeout von `Wire` (ESP32: ca. 1 s). Deshalb nicht zyklisch in Bedienschleifen abfragen, sondern nur kurz nach `setMute()`. Liefert `readStatus()` -1, die Abfrage ganz einstellen.
 - Der Chip hat keinen Software-Reset. Nach dem Power-On-Reset (VDD < 3.5 V) sind alle Ausgaenge stumm, bis `begin()` aufgerufen wird.
 
 ## Beispiele

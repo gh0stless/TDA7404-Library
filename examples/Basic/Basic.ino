@@ -1,4 +1,4 @@
-// Grundfunktionen: Eingang, Lautstärke, Klang, Status
+// Grundfunktionen: Eingang, Lautstaerke, Klang, Status
 #include <Wire.h>
 #include <TDA7404.h>
 
@@ -25,7 +25,7 @@ void setup() {
 }
 
 void loop() {
-    // Langsames Ein-/Ausblenden über Soft-Mute
+    // Langsames Ein-/Ausblenden ueber Soft-Mute
     tda.setMute(true);
     while (tda.isMuting()) delay(1);
     delay(1000);

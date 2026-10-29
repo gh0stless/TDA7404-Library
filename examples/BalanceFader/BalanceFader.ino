@@ -1,4 +1,4 @@
-// Balance/Fader und Subwoofer über die serielle Konsole
+// Balance/Fader und Subwoofer ueber die serielle Konsole
 // Befehle: b<wert>  Balance -100..100   f<wert>  Fader -100..100
 //          s<wert>  Subwoofer 0..-50 dB  v<wert>  Volume -79..20 dB
 #include <Wire.h>

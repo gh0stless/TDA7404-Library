@@ -1,10 +1,10 @@
 /**
- * TDA7404 – Arduino/PlatformIO-Library für den ST TDA7404 Audioprozessor (I2C).
+ * TDA7404 – Arduino/PlatformIO-Library fuer den ST TDA7404 Audioprozessor (I2C).
  *
  * Alle Registerwerte stammen aus dem Datenblatt TDA7404 Rev.3 (Kap. 5).
- * Die Library hält eine Schattenkopie aller 13 Register, damit Funktionen,
+ * Die Library haelt eine Schattenkopie aller 13 Register, damit Funktionen,
  * die sich ein Register teilen (z. B. Lautsprecher LF + Bass-Mittenfrequenz),
- * sich nicht gegenseitig überschreiben.
+ * sich nicht gegenseitig ueberschreiben.
  *
  * Der I2C-Bus wird NICHT von der Library gestartet – vorher Wire.begin() aufrufen.
  */
@@ -50,7 +50,7 @@ public:
         BEEP      = 7
     };
 
-    // ---- Lautsprecherkanäle ----
+    // ---- Lautsprecherkanaele ----
     enum class Channel : uint8_t {
         LEFT_FRONT = 0, RIGHT_FRONT, LEFT_REAR, RIGHT_REAR, SUB_LEFT, SUB_RIGHT
     };
@@ -81,7 +81,7 @@ public:
     enum class AcCoupling : uint8_t {
         INTERNAL_PASS  = 0,  // interne Verbindung, kein externes AC-Coupling
         MIX_TO_VOLUME  = 1,  // ext. Kopplung zwischen Mixing und Volume
-        BASS_TO_SPEAKER = 3  // ext. Kopplung zwischen Bassfilter und Lautsprecher-Abschwächer
+        BASS_TO_SPEAKER = 3  // ext. Kopplung zwischen Bassfilter und Lautsprecher-Abschwaecher
     };
     enum class SoftStepTime : uint8_t { T0_68MS = 0, T1_26MS = 1, T2_52MS = 2, T5_04MS = 3 };
 
@@ -94,7 +94,7 @@ public:
     TDA7404();
 
     /**
-     * Prüft, ob der Chip antwortet, und schreibt den kompletten Default-Satz.
+     * Prueft, ob der Chip antwortet, und schreibt den kompletten Default-Satz.
      * Danach: Eingang SE1, 0 dB Gain, Volume -40 dB, Klang neutral, alle
      * Lautsprecher 0 dB, Soft-Mute aus.
      */
@@ -113,7 +113,7 @@ public:
     Input getInput() const;
     uint8_t getInputGain() const;       // in dB
 
-    // ---- Lautstärke ----
+    // ---- Lautstaerke ----
     bool setVolume(int8_t db);          // -79..+30 dB, begrenzt durch setVolumeLimit()
     int8_t getVolume() const;
     void setVolumeLimit(int8_t maxDb);  // Default +20 dB
@@ -123,7 +123,7 @@ public:
     // ---- Loudness ----
     bool setLoudness(uint8_t attenuationDb, LoudnessFreq freq = LoudnessFreq::F400HZ,
                      LoudnessShape shape = LoudnessShape::LOW_BOOST);  // 0..15 dB
-    bool setSoftStep(bool enable);      // Soft-Step-Volume (nur für 1-dB-Schritte sinnvoll)
+    bool setSoftStep(bool enable);      // Soft-Step-Volume (nur fuer 1-dB-Schritte sinnvoll)
 
     // ---- Klang ----
     bool setTreble(int8_t db);          // -15..+15 dB
@@ -136,18 +136,18 @@ public:
     int8_t getBass() const;
 
     // ---- Lautsprecher / Subwoofer ----
-    bool setSpeaker(Channel ch, int8_t db);  // 0..-50 dB (ab -24 dB gröbere Stufen)
+    bool setSpeaker(Channel ch, int8_t db);  // 0..-50 dB (ab -24 dB groebere Stufen)
     bool setSpeakerMute(Channel ch, bool mute);
-    float getSpeaker(Channel ch) const;      // tatsächlicher Wert in dB
+    float getSpeaker(Channel ch) const;      // tatsaechlicher Wert in dB
     // Balance (-100 = nur links, +100 = nur rechts) und Fader (-100 = nur hinten,
     // +100 = nur vorne) – wirken auf die vier Hauptlautsprecher.
     bool setBalanceFader(int8_t balance, int8_t fader);
 
     // ---- Soft-Mute ----
-    bool setMute(bool mute);            // Soft-Mute über I2C
+    bool setMute(bool mute);            // Soft-Mute ueber I2C
     bool setMuteTime(MuteTime t);
     bool setZeroCrossMute(bool zeroCross); // false = Soft-Mute (Default), true = Zero-Cross
-    bool isMuting();                    // Statusbit: Mute-/Demute-Vorgang läuft
+    bool isMuting();                    // Statusbit: Mute-/Demute-Vorgang laeuft
 
     // ---- Mixing / Beep ----
     bool setMixing(MixSource src, MixLevel level);
@@ -161,9 +161,9 @@ public:
     bool writeRegister(uint8_t reg, uint8_t value);
     uint8_t getRegister(uint8_t reg) const;
     int8_t readStatus();                // Statusbyte, -1 bei Fehler
-    uint8_t lastError() const { return _lastError; }  // Rückgabe von endTransmission()
+    uint8_t lastError() const { return _lastError; }  // Rueckgabe von endTransmission()
 
-    // Hilfsfunktionen für Anzeige
+    // Hilfsfunktionen fuer Anzeige
     static float speakerStepToDb(uint8_t step);
 
 private:

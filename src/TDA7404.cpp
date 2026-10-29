@@ -122,7 +122,7 @@ uint8_t TDA7404::getInputGain() const {
     return code == 15 ? 16 : code;
 }
 
-// ---------------- Lautstärke ----------------
+// ---------------- Lautstaerke ----------------
 
 bool TDA7404::setVolume(int8_t db) {
     _volumeDb = clampi(db, VOLUME_MIN_DB, _volumeLimit);
@@ -220,7 +220,7 @@ uint8_t TDA7404::speakerReg(Channel ch) {
 uint8_t TDA7404::speakerDbToStep(int8_t db) {
     if (db >= 0) return 0;
     if (db >= -23) return -db;
-    // Grobe Stufen: nächstgelegenen Wert suchen
+    // Grobe Stufen: naechstgelegenen Wert suchen
     int16_t target = -2 * (int16_t)db;
     uint8_t best = 31;
     int16_t bestDiff = 0x7FFF;
@@ -255,7 +255,7 @@ float TDA7404::getSpeaker(Channel ch) const {
 bool TDA7404::setBalanceFader(int8_t balance, int8_t fader) {
     int16_t b = clampi(balance, -100, 100);
     int16_t f = clampi(fader, -100, 100);
-    // Dämpfung pro Seite: 0..100 % -> 0..-50 dB, bei 100 % stumm
+    // Daempfung pro Seite: 0..100 % -> 0..-50 dB, bei 100 % stumm
     int16_t attLeft  = b > 0 ? b : 0;
     int16_t attRight = b < 0 ? -b : 0;
     int16_t attFront = f < 0 ? -f : 0;
@@ -291,7 +291,7 @@ bool TDA7404::setMuteTime(MuteTime t) {
 }
 
 bool TDA7404::setZeroCrossMute(bool zeroCross) {
-    // Das Bit sitzt im Subadress-Byte, also mit dem nächsten Schreibzugriff übertragen
+    // Das Bit sitzt im Subadress-Byte, also mit dem naechsten Schreibzugriff uebertragen
     _zeroCross = zeroCross;
     return writeRegister(REG_MUTE_MIX, _reg[REG_MUTE_MIX]);
 }

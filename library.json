@@ -1,7 +1,7 @@
 {
   "name": "TDA7404",
   "version": "1.0.0",
-  "description": "Steuerung des ST TDA7404 Audioprozessors ueber I2C",
+  "description": "Control the ST TDA7404 audio processor via I2C",
   "keywords": ["tda7404", "audio", "i2c", "preamp", "equalizer"],
   "authors": [{ "name": "Andreas Schumm (gh0stless)", "email": "schumm@arcor.de", "maintainer": true }],
   "license": "Unlicense",

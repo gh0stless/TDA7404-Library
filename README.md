@@ -1,9 +1,9 @@
 # TDA7404
 
-Arduino/PlatformIO-Library fuer den ST **TDA7404** Audioprozessor (I2C, 7-Bit-Adresse `0x44`).
-Alle Registerwerte nach Datenblatt TDA7404 Rev.3, Kapitel 5.
+Arduino/PlatformIO library for the ST **TDA7404** audio processor (I2C, 7-bit address `0x44`).
+All register values follow the TDA7404 datasheet Rev.3, chapter 5.
 
-## Schnellstart
+## Quick start
 
 ```cpp
 #include <Wire.h>
@@ -12,45 +12,45 @@ Alle Registerwerte nach Datenblatt TDA7404 Rev.3, Kapitel 5.
 TDA7404 tda;
 
 void setup() {
-    Wire.begin();                 // Bus selbst starten (ESP32: Wire.begin(SDA, SCL))
-    tda.begin();                  // schreibt den Default-Satz, false = Chip antwortet nicht
+    Wire.begin();                 // start the bus yourself (ESP32: Wire.begin(SDA, SCL))
+    tda.begin();                  // writes the default set, false = chip does not respond
     tda.setInput(TDA7404::Input::SE1);
     tda.setVolume(-20);           // dB
     tda.setBass(4);               // -15..+15 dB
 }
 ```
 
-Nach `begin()` gilt: Eingang SE1, Gain 0 dB, Volume -40 dB, Klang neutral, alle Lautsprecher auf 0 dB, Soft-Mute aus.
+After `begin()`: input SE1, gain 0 dB, volume -40 dB, tone flat, all speakers at 0 dB, soft mute off.
 
-## Funktionen
+## Functions
 
-| Bereich | Funktionen | Werte |
+| Area | Functions | Values |
 |---|---|---|
-| Eingang | `setInput`, `setInputGain` | `MONO_DIFF, SE1..SE4, MUTE, BEEP`; Gain 0..14, 16, 18, 20 dB |
-| Lautstaerke | `setVolume`, `setVolumeLimit`, `setVolumeMute`, `setDifferentialMode` | -79..+30 dB, Default-Limit +20 dB |
+| Input | `setInput`, `setInputGain` | `MONO_DIFF, SE1..SE4, MUTE, BEEP`; gain 0..14, 16, 18, 20 dB |
+| Volume | `setVolume`, `setVolumeLimit`, `setVolumeMute`, `setDifferentialMode` | -79..+30 dB, default limit +20 dB |
 | Loudness | `setLoudness`, `setSoftStep`, `setSoftStepTime` | 0..15 dB, 400/800/2400 Hz |
-| Hoehen | `setTreble`, `setTrebleFreq` | ±15 dB, 10/12.5/15/17.5 kHz |
+| Treble | `setTreble`, `setTrebleFreq` | ±15 dB, 10/12.5/15/17.5 kHz |
 | Bass | `setBass`, `setBassFreq`, `setBassQ`, `setBassDcMode` | ±15 dB, 60/80/100/200 Hz, Q 1..2 |
-| Lautsprecher | `setSpeaker`, `setSpeakerMute`, `getSpeaker`, `setBalanceFader` | 0..-23 dB in 1-dB-Schritten, danach -24.5 … -50 dB |
-| Mute | `setMute`, `setMuteTime`, `setZeroCrossMute`, `isMuting` | Soft-Mute 0.48..122.8 ms |
-| Mixing | `setMixing`, `setBeep` | Beep/Phone, 4 Pegel |
-| Sonstiges | `setAcCoupling`, `writeRegister`, `getRegister`, `writeAll`, `readStatus` | |
+| Speakers | `setSpeaker`, `setSpeakerMute`, `getSpeaker`, `setBalanceFader` | 0..-23 dB in 1 dB steps, then -24.5 … -50 dB |
+| Mute | `setMute`, `setMuteTime`, `setZeroCrossMute`, `isMuting` | soft mute 0.48..122.8 ms |
+| Mixing | `setMixing`, `setBeep` | beep/phone, 4 levels |
+| Other | `setAcCoupling`, `writeRegister`, `getRegister`, `writeAll`, `readStatus` | |
 
-Alle Setter geben `true` zurueck, wenn der Chip den Schreibzugriff quittiert hat. `lastError()` liefert sonst den Rueckgabewert von `Wire.endTransmission()`.
+All setters return `true` if the chip acknowledged the write. Otherwise `lastError()` returns the result of `Wire.endTransmission()`.
 
-## Hinweise
+## Notes
 
-- Die Library spiegelt alle Register. Funktionen, die sich ein Register teilen, ueberschreiben sich deshalb nicht gegenseitig. Ein Beispiel: Die Bass-Mittenfrequenz liegt im Register des Lautsprechers LF.
-- Bei jedem Schreiben in Register 0 (Eingang/Gain) startet der Chip einen AutoZero-Zyklus und ist dabei ca. 0.3 ms stumm. `writeAll()` (Refresh) setzt standardmaessig *AutoZero Remain*, um das zu vermeiden.
-- Soft-Step-Volume nur bei 1-dB-Schritten einschalten. Bei groesseren Spruengen kann laut Datenblatt ein Fehler von 1 dB entstehen.
-- `isMuting()` und `readStatus()` lesen das Statusbyte ueber den Bus. Antwortet der Chip nicht, wartet der Lesezugriff bis zum Timeout von `Wire` (ESP32: ca. 1 s). Deshalb nicht zyklisch in Bedienschleifen abfragen, sondern nur kurz nach `setMute()`. Liefert `readStatus()` -1, die Abfrage ganz einstellen.
-- Der Chip hat keinen Software-Reset. Nach dem Power-On-Reset (VDD < 3.5 V) sind alle Ausgaenge stumm, bis `begin()` aufgerufen wird.
+- The library mirrors all registers, so functions sharing a register do not overwrite each other. Example: the bass center frequency lives in the register of speaker LF.
+- Every write to register 0 (input/gain) starts an AutoZero cycle, during which the chip is muted for about 0.3 ms. `writeAll()` (refresh) sets *AutoZero Remain* by default to avoid this.
+- Only enable soft step volume for 1 dB steps. According to the datasheet, larger jumps can cause an error of 1 dB.
+- `isMuting()` and `readStatus()` read the status byte over the bus. If the chip does not respond, the read blocks until the `Wire` timeout (ESP32: about 1 s). So do not poll them continuously in a UI loop; only query them shortly after `setMute()`. If `readStatus()` returns -1, stop polling altogether.
+- The chip has no software reset. After a power-on reset (VDD < 3.5 V) all outputs stay muted until `begin()` is called.
 
-## Beispiele
+## Examples
 
-- `examples/Basic`: Eingang, Klang, Soft-Mute mit Statusabfrage
-- `examples/BalanceFader`: Balance, Fader und Subwoofer ueber die serielle Konsole
+- `examples/Basic`: input, tone, soft mute with status query
+- `examples/BalanceFader`: balance, fader and subwoofer via the serial console
 
-## Lizenz
+## License
 
-Public Domain ([The Unlicense](LICENSE)). Du darfst alles damit machen, ohne Bedingungen.
+Public domain ([The Unlicense](LICENSE)). Do whatever you want with it, no conditions.

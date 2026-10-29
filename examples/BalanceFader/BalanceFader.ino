@@ -1,6 +1,6 @@
-// Balance/Fader und Subwoofer ueber die serielle Konsole
-// Befehle: b<wert>  Balance -100..100   f<wert>  Fader -100..100
-//          s<wert>  Subwoofer 0..-50 dB  v<wert>  Volume -79..20 dB
+// Balance/fader and subwoofer via the serial console
+// Commands: b<value>  balance -100..100   f<value>  fader -100..100
+//           s<value>  subwoofer 0..-50 dB  v<value>  volume -79..20 dB
 #include <Wire.h>
 #include <TDA7404.h>
 
@@ -22,7 +22,7 @@ void setup() {
     Serial.begin(115200);
     Wire.begin();
     if (!tda.begin()) {
-        Serial.println("TDA7404 nicht gefunden");
+        Serial.println("TDA7404 not found");
         while (true) delay(1000);
     }
     tda.setVolume(-30);
